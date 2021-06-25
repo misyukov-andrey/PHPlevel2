@@ -24,11 +24,10 @@ DROP TABLE IF EXISTS `basket`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `basket` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` tinytext,
-  `price` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
+  `session_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +36,7 @@ CREATE TABLE `basket` (
 
 LOCK TABLES `basket` WRITE;
 /*!40000 ALTER TABLE `basket` DISABLE KEYS */;
-INSERT INTO `basket` VALUES (1,'Кровать',4000,1);
+INSERT INTO `basket` VALUES (1,111,1),(2,23134,2);
 /*!40000 ALTER TABLE `basket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-22 14:02:57
+-- Dump completed on 2021-06-25  7:24:56
