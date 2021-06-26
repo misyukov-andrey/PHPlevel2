@@ -15,6 +15,7 @@ class Product extends DBModel
         'price' => false
     ];
 
+
     public function __construct($name = null, $description = null, $price = null)
     {
         $this->name = $name;
@@ -27,6 +28,4 @@ class Product extends DBModel
     {
         return 'product';
     }
-
 }
-

@@ -4,15 +4,24 @@
 namespace app\controllers;
 
 
-
+use app\engine\Render;
+use app\engine\TwigRender;
+use app\interfaces\IRenderer;
 
 abstract class Controller
-
 {
     private $action;
     private $defaultAction = 'index';
     private $layout = 'main';
     private $useLayout = true;
+
+    private $render;
+
+
+    public function __construct(IRenderer $render)
+    {
+        $this->render = $render;
+    }
 
 
     public function runAction($action) {
@@ -26,27 +35,19 @@ abstract class Controller
     }
 
 
-    public function render($template, $params = []) {
+    protected function render($template, $params = []) {
         if ($this->useLayout) {
             return $this->renderTemplate("layouts/{$this->layout}", [
                 'menu' => $this->renderTemplate('menu', $params),
-                'content' => $this->renderTemplate($template, $params),
-                'basket' => $this->renderTemplate('basket', $params),
+                'content' => $this->renderTemplate($template, $params)
             ]);
         } else {
             return $this->renderTemplate($template, $params);
         }
     }
 
-    public function renderTemplate($template, $params = []) {
-        ob_start();
-        extract($params);
-        $templatePath = VIEWS_DIR . $template . '.php';
-        if (file_exists($templatePath)) {
-            include $templatePath;
-            return ob_get_clean();
-        } else {
-            die('Шаблона не существует');
-        }
+    protected function renderTemplate($template, $params = []) {
+        return $this->render->renderTemplate($template, $params);
     }
+
 }
