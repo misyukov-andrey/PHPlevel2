@@ -8,7 +8,7 @@ class Db
 {
     protected $config = [
         'driver' => 'mysql',
-        'host' => 'localhost:8889',
+        'host' => 'localhost:3306',
         'login' => 'root',
         'password' => 'root',
         'database' => 'test',
@@ -22,7 +22,8 @@ class Db
     protected function getConnection()
     {
         if (is_null($this->connection)) {
-            $this->connection = new \PDO($this->prepareDsnString(),
+            $this->connection = new \PDO(
+                $this->prepareDsnString(),
                 $this->config['login'],
                 $this->config['password']
             );
@@ -32,8 +33,10 @@ class Db
         return $this->connection;
     }
 
-    protected function prepareDsnString() {
-        return sprintf("%s:host=%s;dbname=%s;charset=%s",
+    protected function prepareDsnString()
+    {
+        return sprintf(
+            "%s:host=%s;dbname=%s;charset=%s",
             $this->config['driver'],
             $this->config['host'],
             $this->config['database'],
@@ -41,19 +44,23 @@ class Db
         );
     }
 
-    public function lastInsertId() {
-       return $this->connection->lastInsertId();
+    public function lastInsertId()
+    {
+        return $this->connection->lastInsertId();
     }
 
     //SELECT * FROM `products` WHERE id = :id AND name = :name
     //$params = ['id' => 3, 'name' => 'alex'];
-    private function query($sql, $params) {
+    private function query($sql, $params)
+    {
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($params);
         return $stmt;
     }
 
-    public function queryLimit($sql, $limit) {
+    public function queryLimit($sql, $limit)
+    {
+        //LIMIT 0, $limit
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->bindValue(1, $limit, \PDO::PARAM_INT);
         $stmt->execute();
@@ -81,5 +88,4 @@ class Db
     {
         return $this->query($sql, $params)->rowCount();
     }
-
 }

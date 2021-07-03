@@ -17,11 +17,16 @@ abstract class DBModel extends Model
 
     }
 
+    public static function getWhere($name, $value) {
+        //TODO собрать запрос вида WHERE 'login' = 'admin'
+    }
+
     public static function getOne($id)
     {
         $tableName = static::getTableName();
         $sql = "SELECT * FROM {$tableName} WHERE id = :id";
-   
+
+        //return DB::getInstance()->queryOne($sql, ['id' => $id]);
         return DB::getInstance()->queryOneObject($sql, ['id' => $id], static::class);
     }
 
@@ -43,7 +48,7 @@ abstract class DBModel extends Model
         //$params = ['name' => 'Чай'...];
 
         foreach ($this->props as $key => $value) {
-            $params["{$key}"] = $this->$key;
+            $params[":{$key}"] = $this->$key;
             $columns[] = $key;
 
         }
@@ -62,22 +67,19 @@ abstract class DBModel extends Model
     protected function update()
     {
         $params = [];
-        $columns = [];
+        $colums = [];
 
-        foreach($this->props as $key => $value){
-            if(!$value) continue;
+        foreach ($this->props as $key => $value) {
+            if (!$value) continue;
             $params["{$key}"] = $this->$key;
-            $columns[] .= "'{$key}' = :{$key}"; 
+            $colums[] .= "`{$key}` = :{$key}";
             $this->props[$key] = false;
         }
-
-        $columns = implode(', ', $columns);
-      
+        $colums = implode(", ", $colums);
         $tableName = static::getTableName();
         $params['id'] = $this->id;
-        $sql = "UPDATE `{$tableName}` SET ({$columns}) WHERE 'id' = :id";
-        DB::getInstance()->lastInsertId($sql, $params);
- 
+        $sql = "UPDATE `{$tableName}` SET {$colums} WHERE `id` = :id";
+        Db::getInstance()->execute($sql, $params);
     }
 
     public function delete()

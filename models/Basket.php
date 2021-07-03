@@ -19,7 +19,7 @@ class Basket extends DBModel
 
 
     public static function getBasket() {
-        $sql = "SELECT basket.id basket_id, product.id prod_id, product.name, product.description, product.price FROM `basket`,`product` WHERE `session_id` = '111' AND basket.product_id = product.id";
+        $sql = "SELECT basket.id basket_id, products.id prod_id, products.name, products.description, products.price FROM `basket`,`products` WHERE `session_id` = '111' AND basket.product_id = products.id";
         return Db::getInstance()->queryAll($sql);
     }
 
